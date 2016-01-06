@@ -1,2 +1,2 @@
 # api
-Fortifi Public API
+Fortifi API Core
