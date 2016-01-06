@@ -86,7 +86,7 @@ class ApiRequest implements IApiRequest
     throw new \Exception("Invalid API Result Stored", 500);
   }
 
-  public function getResultJson()
+  protected function _getResultJson()
   {
     if($this->_decoded === null)
     {
