@@ -11,6 +11,13 @@ interface IApiRequest
   public function getRawResult();
 
   /**
+   * Decode the result as json
+   *
+   * @return \stdClass
+   */
+  public function getResultJson();
+
+  /**
    * @param IApiResult $result
    *
    * @return self

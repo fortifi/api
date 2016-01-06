@@ -14,6 +14,11 @@ class ApiRequest implements IApiRequest
   private $_connection;
 
   /**
+   * @var \stdClass
+   */
+  private $_decoded;
+
+  /**
    * @var IApiResult
    */
   private $_result;
@@ -79,6 +84,15 @@ class ApiRequest implements IApiRequest
     }
 
     throw new \Exception("Invalid API Result Stored", 500);
+  }
+
+  public function getResultJson()
+  {
+    if($this->_decoded === null)
+    {
+      $this->_decoded = json_decode($this->getRawResult()->getContent());
+    }
+    return $this->_decoded;
   }
 
   public function wasSuccessful()
