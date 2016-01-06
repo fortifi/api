@@ -43,11 +43,42 @@ class ApiRequest implements IApiRequest
   }
 
   /**
-   * @return IApiResult
+   * @return IApiResult|null
+   * @throws \Exception
    */
   public function getRawResult()
   {
-    return $this->_result;
+    if($this->_result === null)
+    {
+      if($this->hasConnection())
+      {
+        $this->setRawResult(
+          $this->_getConnection()->load($this)->getRawResult()
+        );
+      }
+      else
+      {
+        throw new \Exception("No API Connection Available", 500);
+      }
+    }
+
+    if($this->_result instanceof IApiResult)
+    {
+      if($this->shouldThrowExceptions())
+      {
+        if($this->_result->getStatusCode() !== 200)
+        {
+          throw new \Exception(
+            $this->_result->getStatusMessage(),
+            $this->_result->getStatusCode()
+          );
+        }
+      }
+
+      return $this->_result;
+    }
+
+    throw new \Exception("Invalid API Result Stored", 500);
   }
 
   /**
@@ -67,6 +98,14 @@ class ApiRequest implements IApiRequest
   {
     $this->_connection = $connection;
     return $this;
+  }
+
+  /**
+   * @return IApiConnection
+   */
+  protected function _getConnection()
+  {
+    return $this->_connection;
   }
 
   /**
