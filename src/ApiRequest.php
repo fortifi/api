@@ -81,6 +81,18 @@ class ApiRequest implements IApiRequest
     throw new \Exception("Invalid API Result Stored", 500);
   }
 
+  public function wasSuccessful()
+  {
+    try
+    {
+      return $this->getRawResult()->getStatusCode() == 200;
+    }
+    catch(\Exception $e)
+    {
+      return false;
+    }
+  }
+
   /**
    * @return IApiRequestDetail
    */
