@@ -3,6 +3,7 @@
   "description": "Fortifi Business Platform",
   "homepage": "http://fortifi.co",
   "require": {
+    "rmccue/requests": ">=1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.5"

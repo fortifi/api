@@ -7,6 +7,8 @@ class ApiResult implements IApiResult
   protected $_statusMessage = 'OK';
   protected $_content = '';
   protected $_callId = '';
+  protected $_headers = [];
+  protected $_cookies = [];
   protected $_timeTaken = 0;
 
   /**
@@ -50,6 +52,22 @@ class ApiResult implements IApiResult
   }
 
   /**
+   * @inheritDoc
+   */
+  public function getCookies()
+  {
+    return $this->_cookies;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public function getHeaders()
+  {
+    return $this->_headers;
+  }
+
+  /**
    * @param mixed $statusCode
    */
   public function setStatusCode($statusCode)
@@ -87,5 +105,27 @@ class ApiResult implements IApiResult
   public function setTotalTime($timeTaken)
   {
     $this->_timeTaken = $timeTaken;
+  }
+
+  /**
+   * @param array $headers
+   *
+   * @return $this
+   */
+  public function setHeaders(array $headers)
+  {
+    $this->_headers = $headers;
+    return $this;
+  }
+
+  /**
+   * @param array $cookies
+   *
+   * @return $this
+   */
+  public function setCookies(array $cookies)
+  {
+    $this->_cookies = $cookies;
+    return $this;
   }
 }

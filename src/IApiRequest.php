@@ -11,6 +11,13 @@ interface IApiRequest
   public function getRawResult();
 
   /**
+   * @param IApiResult $result
+   *
+   * @return self
+   */
+  public function setRawResult(IApiResult $result);
+
+  /**
    * Information about the request
    *
    * @return IApiRequestDetail
@@ -18,18 +25,18 @@ interface IApiRequest
   public function getRequestDetail();
 
   /**
-   * @param IFortifiApi $api
+   * @param IApiConnection $connection
    *
    * @return self
    */
-  public function setApi(IFortifiApi $api);
+  public function setConnection(IApiConnection $connection);
 
   /**
    * Check for existing binding of an IFortifiApi
    *
    * @return bool
    */
-  public function hasApi();
+  public function hasConnection();
 
   /**
    * Should Exceptions be thrown when processing the raw result

@@ -37,4 +37,18 @@ interface IApiResult
    * @return int
    */
   public function getTotalTime();
+
+  /**
+   * Cookies from the result
+   *
+   * @return array
+   */
+  public function getCookies();
+
+  /**
+   * Headers from the result
+   *
+   * @return array
+   */
+  public function getHeaders();
 }

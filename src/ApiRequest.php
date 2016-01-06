@@ -9,9 +9,9 @@ class ApiRequest implements IApiRequest
   private $_throw = true;
 
   /**
-   * @var IFortifiApi
+   * @var IApiConnection
    */
-  private $_api;
+  private $_connection;
 
   /**
    * @var IApiResult
@@ -34,11 +34,9 @@ class ApiRequest implements IApiRequest
   }
 
   /**
-   * @param IApiResult $result
-   *
-   * @return $this
+   * @inheritDoc
    */
-  public function setResult(IApiResult $result)
+  public function setRawResult(IApiResult $result)
   {
     $this->_result = $result;
     return $this;
@@ -61,22 +59,22 @@ class ApiRequest implements IApiRequest
   }
 
   /**
-   * @param IFortifiApi $api
+   * @param IApiConnection $connection
    *
    * @return $this
    */
-  public function setApi(IFortifiApi $api)
+  public function setConnection(IApiConnection $connection)
   {
-    $this->_api = $api;
+    $this->_connection = $connection;
     return $this;
   }
 
   /**
    * @return bool
    */
-  public function hasApi()
+  public function hasConnection()
   {
-    return $this->_api !== null;
+    return $this->_connection !== null;
   }
 
   /**

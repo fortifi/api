@@ -1,7 +1,7 @@
 <?php
 namespace Fortifi\Api\Core;
 
-interface IFortifiApi
+interface IApiConnection
 {
   /**
    * @param IApiRequest $request to load
