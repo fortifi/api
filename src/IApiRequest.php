@@ -1,7 +1,7 @@
 <?php
 namespace Fortifi\Api\Core;
 
-interface IApiRequest
+interface IApiRequest extends IApiConnectionAware
 {
   /**
    * Raw result from the API Request
@@ -30,20 +30,6 @@ interface IApiRequest
    * @return IApiRequestDetail
    */
   public function getRequestDetail();
-
-  /**
-   * @param IApiConnection $connection
-   *
-   * @return self
-   */
-  public function setConnection(IApiConnection $connection);
-
-  /**
-   * Check for existing binding of an IFortifiApi
-   *
-   * @return bool
-   */
-  public function hasConnection();
 
   /**
    * Should Exceptions be thrown when processing the raw result
