@@ -99,6 +99,18 @@ class ApiRequestDetail implements IApiRequestDetail
   }
 
   /**
+   * @param $key
+   * @param $value
+   *
+   * @return $this
+   */
+  public function addHeader($key, $value)
+  {
+    $this->_headers[$key] = $value;
+    return $this;
+  }
+
+  /**
    * @param array $options
    *
    * @return ApiRequestDetail
@@ -106,6 +118,18 @@ class ApiRequestDetail implements IApiRequestDetail
   public function setOptions(array $options)
   {
     $this->_options = $options;
+    return $this;
+  }
+
+  /**
+   * @param $key
+   * @param $value
+   *
+   * @return $this
+   */
+  public function addOption($key, $value)
+  {
+    $this->_options[$key] = $value;
     return $this;
   }
 
@@ -121,6 +145,18 @@ class ApiRequestDetail implements IApiRequestDetail
   }
 
   /**
+   * @param $key
+   * @param $value
+   *
+   * @return $this
+   */
+  public function addPostField($key, $value)
+  {
+    $this->_post[$key] = $value;
+    return $this;
+  }
+
+  /**
    * @param array $query
    *
    * @return ApiRequestDetail
@@ -128,6 +164,18 @@ class ApiRequestDetail implements IApiRequestDetail
   public function setQueryFields(array $query)
   {
     $this->_query = $query;
+    return $this;
+  }
+
+  /**
+   * @param $key
+   * @param $value
+   *
+   * @return $this
+   */
+  public function addQueryField($key, $value)
+  {
+    $this->_query[$key] = $value;
     return $this;
   }
 
