@@ -4,6 +4,7 @@ namespace Fortifi\Api\Core\Connections;
 use Fortifi\Api\Core\ApiResult;
 use Fortifi\Api\Core\IApiConnection;
 use Fortifi\Api\Core\IApiRequest;
+use Fortifi\Api\Core\IApiRequestDetail;
 
 class RequestsConnection implements IApiConnection
 {
@@ -40,8 +41,8 @@ class RequestsConnection implements IApiConnection
     $req = $request->getRequestDetail();
     $response = \Requests::request(
       $req->getUrl(),
-      $this->_buildHeaders($req->getHeaders()),
-      $req->getPostFields(),
+      $this->_buildHeaders($req),
+      $this->_buildData($req),
       $req->getMethod(),
       $req->getOptions()
     );
@@ -69,8 +70,8 @@ class RequestsConnection implements IApiConnection
 
         $batchReq = [
           'url'     => $reqDet->getUrl(),
-          'headers' => $this->_buildHeaders($reqDet->getHeaders()),
-          'data'    => $reqDet->getPostFields(),
+          'headers' => $this->_buildHeaders($reqDet),
+          'data'    => $this->_buildData($reqDet),
           'type'    => $reqDet->getMethod(),
           'options' => $reqDet->getOptions(),
           'cookies' => [],
@@ -92,7 +93,11 @@ class RequestsConnection implements IApiConnection
   {
     $result = new ApiResult();
     $result->setStatusCode($response->status_code);
-    $result->setCallId(reset($response->headers->getValues('X-Call-Id')));
+    $callId = $response->headers->getValues('X-Call-Id');
+    if(!empty($callId))
+    {
+      $result->setCallId(reset($callId));
+    }
 
     $decoded = json_decode($response->body);
     if(isset($decoded->meta) && isset($decoded->data)
@@ -134,8 +139,21 @@ class RequestsConnection implements IApiConnection
     return $result;
   }
 
-  protected function _buildHeaders(array $headers)
+  protected function _buildData(IApiRequestDetail $request)
   {
+    if($request->getRequestBody())
+    {
+      return $request->getRequestBody();
+    }
+    else
+    {
+      return $request->getPostFields();
+    }
+  }
+
+  protected function _buildHeaders(IApiRequestDetail $request)
+  {
+    $headers = $request->getHeaders();
     if(!empty($this->_orgFid))
     {
       $headers['X-Fortifi-Org'] = $this->_orgFid;
@@ -145,6 +163,12 @@ class RequestsConnection implements IApiConnection
     {
       $headers['Authorization'] = 'Bearer ' . $this->_accessToken;
     }
+
+    if($request->getRequestBody())
+    {
+      $headers['Content-Type'] = 'application/json';
+    }
+
     return $headers;
   }
 }
