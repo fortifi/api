@@ -16,4 +16,18 @@ interface IApiConnection
    * @return self
    */
   public function batchLoad($requests);
+
+  /**
+   * @param string $fid Organisation FID
+   *
+   * @return $this
+   */
+  public function setOrganisationFid($fid);
+
+  /**
+   * @param string $token Access Token
+   *
+   * @return $this
+   */
+  public function setAccessToken($token);
 }

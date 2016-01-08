@@ -7,6 +7,31 @@ use Fortifi\Api\Core\IApiRequest;
 
 class RequestsConnection implements IApiConnection
 {
+  protected $_orgFid;
+  protected $_accessToken;
+
+  /**
+   * @param string $fid Organisation FID
+   *
+   * @return $this
+   */
+  public function setOrganisationFid($fid)
+  {
+    $this->_orgFid = $fid;
+    return $this;
+  }
+
+  /**
+   * @param string $token Access Token
+   *
+   * @return $this
+   */
+  public function setAccessToken($token)
+  {
+    $this->_accessToken = $token;
+    return $this;
+  }
+
   /**
    * @inheritDoc
    */
@@ -15,7 +40,7 @@ class RequestsConnection implements IApiConnection
     $req = $request->getRequestDetail();
     $response = \Requests::request(
       $req->getUrl(),
-      $req->getHeaders(),
+      $this->_buildHeaders($req->getHeaders()),
       $req->getPostFields(),
       $req->getMethod(),
       $req->getOptions()
@@ -44,7 +69,7 @@ class RequestsConnection implements IApiConnection
 
         $batchReq = [
           'url'     => $reqDet->getUrl(),
-          'headers' => $reqDet->getHeaders(),
+          'headers' => $this->_buildHeaders($reqDet->getHeaders()),
           'data'    => $reqDet->getPostFields(),
           'type'    => $reqDet->getMethod(),
           'options' => $reqDet->getOptions(),
@@ -66,11 +91,60 @@ class RequestsConnection implements IApiConnection
   protected function _getResult(\Requests_Response $response)
   {
     $result = new ApiResult();
-    $result->setContent($response->body);
     $result->setStatusCode($response->status_code);
     $result->setCallId(reset($response->headers->getValues('X-Call-Id')));
-    $result->setCookies($response->cookies);
-    $result->setHeaders($response->headers);
+
+    $decoded = json_decode($response->body);
+    if(isset($decoded->meta) && isset($decoded->data)
+      && isset($decoded->meta->code)
+      && $decoded->meta->code == $response->status_code
+    )
+    {
+      $meta = $decoded->meta;
+      $data = $decoded->data;
+      if(isset($meta->message))
+      {
+        $result->setStatusMessage($meta->message);
+      }
+      $result->setContent(json_encode($data));
+    }
+    else
+    {
+      $result->setContent($response->body);
+    }
+
+    $cookies = $response->cookies;
+    if(!is_array($cookies))
+    {
+      if($cookies instanceof \IteratorAggregate)
+      {
+        $cookies = (array)$cookies->getIterator();
+      }
+    }
+    $result->setCookies($cookies);
+    $headers = $response->headers;
+    if(!is_array($headers))
+    {
+      if($headers instanceof \IteratorAggregate)
+      {
+        $headers = (array)$headers->getIterator();
+      }
+    }
+    $result->setHeaders($headers);
     return $result;
+  }
+
+  protected function _buildHeaders(array $headers)
+  {
+    if(!empty($this->_orgFid))
+    {
+      $headers['X-Fortifi-Org'] = $this->_orgFid;
+    }
+
+    if(!empty($this->_accessToken))
+    {
+      $headers['Authorization'] = 'Bearer ' . $this->_accessToken;
+    }
+    return $headers;
   }
 }
