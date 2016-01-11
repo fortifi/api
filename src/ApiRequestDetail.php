@@ -17,7 +17,25 @@ class ApiRequestDetail implements IApiRequestDetail
    */
   public function getUrl()
   {
-    return $this->_url;
+    if(empty($this->_query))
+    {
+      return $this->_url;
+    }
+
+    if(substr($this->_url, -1, 1) == '?')
+    {
+      $glue = '';
+    }
+    else if(stristr($this->_url, '?'))
+    {
+      $glue = '&';
+    }
+    else
+    {
+      $glue = '?';
+    }
+
+    return $this->_url . $glue . http_build_query($this->_query);
   }
 
   /**
