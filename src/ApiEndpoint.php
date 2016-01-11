@@ -1,9 +1,30 @@
 <?php
 namespace Fortifi\Api\Core;
 
+use Packaged\Helpers\Path;
+
 class ApiEndpoint implements IApiEndpoint
 {
+  protected $_baseUrl = 'http://localhost';
+  protected $_basePath = '';
   protected $_connection;
+
+  public function setBaseUrl($baseUrl)
+  {
+    $this->_baseUrl = $baseUrl;
+    return $this;
+  }
+
+  public function setBasePath($basePath)
+  {
+    $this->_basePath = $basePath;
+    return $this;
+  }
+
+  protected function _buildUrl($path)
+  {
+    return Path::buildUnix($this->_baseUrl, $this->_basePath, $path);
+  }
 
   /**
    * @param IApiConnection $connection
