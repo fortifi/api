@@ -177,7 +177,7 @@ class ApiRequest implements IApiRequest
 
   public function hydrate($data)
   {
-    $this->_decoded = ValueAs::obj($data);
+    $this->_decoded = $this->_prepareResult(ValueAs::obj($data));
     $this->_result = json_encode($this->_decoded);
     return $this;
   }
