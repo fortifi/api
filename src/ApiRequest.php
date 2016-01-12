@@ -90,9 +90,21 @@ class ApiRequest implements IApiRequest
   {
     if($this->_decoded === null)
     {
-      $this->_decoded = json_decode($this->getRawResult()->getContent());
+      $this->_decoded = $this->_prepareResult(
+        json_decode($this->getRawResult()->getContent())
+      );
     }
     return $this->_decoded;
+  }
+
+  public function getDecodedResponse()
+  {
+    return $this->_getResultJson();
+  }
+
+  protected function _prepareResult($result)
+  {
+    return $result;
   }
 
   public function wasSuccessful()
