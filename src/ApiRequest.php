@@ -1,6 +1,8 @@
 <?php
 namespace Fortifi\Api\Core;
 
+use Packaged\Helpers\ValueAs;
+
 class ApiRequest implements IApiRequest
 {
   /**
@@ -171,6 +173,13 @@ class ApiRequest implements IApiRequest
   public function shouldThrowExceptions()
   {
     return $this->_throw;
+  }
+
+  public function hydrate($data)
+  {
+    $this->_decoded = ValueAs::obj($data);
+    $this->_result = json_encode($this->_decoded);
+    return $this;
   }
 
 }
