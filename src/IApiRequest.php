@@ -39,4 +39,11 @@ interface IApiRequest extends IApiConnectionAware
    * @return bool
    */
   public function shouldThrowExceptions();
+
+  /**
+   * If the request has been processed, and the result is available
+   *
+   * @return bool
+   */
+  public function hasResult();
 }

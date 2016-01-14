@@ -182,4 +182,12 @@ class ApiRequest implements IApiRequest
     return $this;
   }
 
+  /**
+   * @inheritDoc
+   */
+  public function hasResult()
+  {
+    return $this->_result !== null;
+  }
+
 }
