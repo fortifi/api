@@ -7,10 +7,11 @@
   },
   "require-dev": {
     "rmccue/requests": ">=1.0",
-    "guzzlehttp/guzzle": "5.0"
+    "guzzlehttp/guzzle": "6.0"
   },
   "suggest": {
-    "rmccue/requests": ">=1.0"
+    "rmccue/requests": ">=1.0 to use the RequestsConnection",
+    "guzzlehttp/guzzle": "5.0 to use the Guzzle5Connection, or 6.0 to use the Guzzle6Connection"
   },
   "autoload": {
     "psr-4": {

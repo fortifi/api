@@ -3,29 +3,20 @@ namespace Fortifi\Api\Core\Connections;
 
 use Fortifi\Api\Core\ApiResult;
 use Fortifi\Api\Core\IApiRequest;
-use GuzzleHttp\Message\ResponseInterface;
+use GuzzleHttp\Psr7\Request;
+use Psr\Http\Message\ResponseInterface;
 
-class Guzzle5Connection extends AbstractGuzzleConnection
+class Guzzle6Connection extends AbstractGuzzleConnection
 {
-  protected function _getOptions(IApiRequest $request)
-  {
-    return array_merge_recursive(
-      (array)$request->getRequestDetail()->getOptions(),
-      [
-        'body' => $this->_buildData($request->getRequestDetail()),
-      ]
-    );
-  }
-
   protected function _makeRequest(IApiRequest $request)
   {
     $req = $request->getRequestDetail();
-    $gRequest = $this->_client->createRequest(
+    $gRequest = new Request(
       $req->getMethod(),
       $req->getUrl(),
-      $this->_getOptions($request)
+      $this->_buildHeaders($req),
+      $this->_buildData($request->getRequestDetail())
     );
-    $gRequest->setHeaders($this->_buildHeaders($request->getRequestDetail()));
     return $gRequest;
   }
 
@@ -34,7 +25,10 @@ class Guzzle5Connection extends AbstractGuzzleConnection
    */
   public function load(IApiRequest $request)
   {
-    $response = $this->_client->send($this->_makeRequest($request));
+    $response = $this->_client->send(
+      $this->_makeRequest($request),
+      $request->getRequestDetail()->getOptions()
+    );
     $result = $this->_getResult($response);
     $request->setRawResult($result);
     return $request;
