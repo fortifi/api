@@ -21,6 +21,22 @@ class ApiEndpoint implements IApiEndpoint
     return $this;
   }
 
+  /**
+   * @return string
+   */
+  public function getBaseUrl()
+  {
+    return $this->_baseUrl;
+  }
+
+  /**
+   * @return string
+   */
+  public function getBasePath()
+  {
+    return $this->_basePath;
+  }
+
   protected function _buildUrl($path)
   {
     return Path::buildUnix($this->_baseUrl, $this->_basePath, $path);
