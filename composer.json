@@ -6,8 +6,6 @@
     "packaged/helpers": "~1.1"
   },
   "require-dev": {
-    "rmccue/requests": ">=1.0",
-    "guzzlehttp/guzzle": "6.0"
   },
   "suggest": {
     "rmccue/requests": ">=1.0 to use the RequestsConnection",
