@@ -1,45 +1,46 @@
 <?php
 namespace Fortifi\Api\Core;
 
+use Fortifi\Api\Core\ApiDefinition\IApiDefinition;
 use Packaged\Helpers\Path;
 
 class ApiEndpoint implements IApiEndpoint
 {
-  protected $_baseUrl = 'http://localhost';
-  protected $_basePath = '';
   protected $_connection;
+  protected $_baseUrl;
 
-  public function setBaseUrl($baseUrl)
-  {
-    $this->_baseUrl = $baseUrl;
-    return $this;
-  }
+  /**
+   * @var IApiDefinition
+   */
+  protected $_definition;
 
-  public function setBasePath($basePath)
+  public function setApiDefinition(IApiDefinition $definition)
   {
-    $this->_basePath = $basePath;
+    $this->_definition = $definition;
+    $this->_baseUrl = null;
     return $this;
   }
 
   /**
-   * @return string
+   * @return IApiDefinition
    */
-  public function getBaseUrl()
+  public function getDefinition()
   {
-    return $this->_baseUrl;
-  }
-
-  /**
-   * @return string
-   */
-  public function getBasePath()
-  {
-    return $this->_basePath;
+    return $this->_definition;
   }
 
   protected function _buildUrl($path)
   {
-    return Path::buildUnix($this->_baseUrl, $this->_basePath, $path);
+    if($this->_baseUrl === null)
+    {
+      $schemas = $this->_definition->getSchemas();
+      rsort($schemas);
+      $this->_baseUrl = reset($schemas);
+      $this->_baseUrl .= $this->_definition->getHost();
+      $this->_baseUrl .= '/' . ltrim($this->_definition->getBasePath(), '/');
+    }
+
+    return Path::buildUnix($this->_baseUrl, $path);
   }
 
   /**
