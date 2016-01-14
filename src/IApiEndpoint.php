@@ -10,7 +10,7 @@ interface IApiEndpoint extends IApiConnectionAware
   /**
    * @return IApiDefinition
    */
-  public function getDefinition();
+  public function getApiDefinition();
 
   /**
    * @return bool

@@ -24,7 +24,7 @@ class ApiEndpoint implements IApiEndpoint
   /**
    * @return IApiDefinition
    */
-  public function getDefinition()
+  public function getApiDefinition()
   {
     return $this->_definition;
   }
