@@ -2,37 +2,11 @@
 namespace Fortifi\Api\Core\Connections;
 
 use Fortifi\Api\Core\ApiResult;
-use Fortifi\Api\Core\IApiConnection;
 use Fortifi\Api\Core\IApiRequest;
-use Fortifi\Api\Core\IApiRequestDetail;
+use Fortifi\Api\Core\IApiResult;
 
-class RequestsConnection implements IApiConnection
+class RequestsConnection extends AbstractConnection
 {
-  protected $_orgFid;
-  protected $_accessToken;
-
-  /**
-   * @param string $fid Organisation FID
-   *
-   * @return $this
-   */
-  public function setOrganisationFid($fid)
-  {
-    $this->_orgFid = $fid;
-    return $this;
-  }
-
-  /**
-   * @param string $token Access Token
-   *
-   * @return $this
-   */
-  public function setAccessToken($token)
-  {
-    $this->_accessToken = $token;
-    return $this;
-  }
-
   /**
    * @inheritDoc
    */
@@ -89,6 +63,11 @@ class RequestsConnection implements IApiConnection
     return $this;
   }
 
+  /**
+   * @param \Requests_Response $response
+   *
+   * @return IApiResult
+   */
   protected function _getResult(\Requests_Response $response)
   {
     $result = new ApiResult();
@@ -137,38 +116,5 @@ class RequestsConnection implements IApiConnection
     }
     $result->setHeaders($headers);
     return $result;
-  }
-
-  protected function _buildData(IApiRequestDetail $request)
-  {
-    if($request->getRequestBody())
-    {
-      return $request->getRequestBody();
-    }
-    else
-    {
-      return $request->getPostFields();
-    }
-  }
-
-  protected function _buildHeaders(IApiRequestDetail $request)
-  {
-    $headers = $request->getHeaders();
-    if(!empty($this->_orgFid))
-    {
-      $headers['X-Fortifi-Org'] = $this->_orgFid;
-    }
-
-    if(!empty($this->_accessToken))
-    {
-      $headers['Authorization'] = 'Bearer ' . $this->_accessToken;
-    }
-
-    if($request->getRequestBody())
-    {
-      $headers['Content-Type'] = 'application/json';
-    }
-
-    return $headers;
   }
 }

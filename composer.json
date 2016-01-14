@@ -3,11 +3,14 @@
   "description": "Fortifi Business Platform",
   "homepage": "http://fortifi.co",
   "require": {
-    "packaged/helpers": "~1.1",
-    "rmccue/requests": ">=1.0"
+    "packaged/helpers": "~1.1"
   },
   "require-dev": {
-    "phpunit/phpunit": "~4.5"
+    "rmccue/requests": ">=1.0",
+    "guzzlehttp/guzzle": "5.0"
+  },
+  "suggest": {
+    "rmccue/requests": ">=1.0"
   },
   "autoload": {
     "psr-4": {
