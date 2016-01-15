@@ -94,6 +94,7 @@ class ServiceAccountGrant implements IGrant
     $request = new ApiRequest();
     $request->setConnection($connection);
     $detail = new ApiRequestDetail();
+    $detail->setMethod('POST');
     $detail->setUrl($definition->getTokenUrl());
     $detail->setPostFields($params);
     $request->setRequestDetail($detail);
