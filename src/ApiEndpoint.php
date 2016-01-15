@@ -92,6 +92,14 @@ class ApiEndpoint implements IApiEndpoint
   }
 
   /**
+   * @return ITokenStorage
+   */
+  public function getTokenStorage()
+  {
+    return $this->_tokenStorage;
+  }
+
+  /**
    * @return IApiDefinition
    */
   public function getApiDefinition()
