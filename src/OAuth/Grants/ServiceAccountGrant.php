@@ -15,6 +15,15 @@ class ServiceAccountGrant implements IGrant
   protected $_apiUser;
 
   /**
+   * @inheritDoc
+   */
+  public function __construct($user = null, $secret = null)
+  {
+    $this->_apiUser = $user;
+    $this->_apiSecret = $secret;
+  }
+
+  /**
    * @param mixed $apiSecret
    *
    * @return ServiceAccountGrant
