@@ -11,6 +11,7 @@ class ApiRequestDetail implements IApiRequestDetail
   protected $_body = '';
   protected $_method = 'GET';
   protected $_isAsync = false;
+  protected $_requireAuth = true;
 
   /**
    * @inheritDoc
@@ -228,6 +229,25 @@ class ApiRequestDetail implements IApiRequestDetail
   {
     $this->_isAsync = $isAsync;
     return $this;
+  }
+
+  /**
+   * @param boolean $requireAuth
+   *
+   * @return ApiRequestDetail
+   */
+  public function setRequireAuth($requireAuth)
+  {
+    $this->_requireAuth = $requireAuth;
+    return $this;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public function requiresAuth()
+  {
+    return (bool)$this->_requireAuth;
   }
 
 }

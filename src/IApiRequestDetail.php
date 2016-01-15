@@ -58,4 +58,9 @@ interface IApiRequestDetail
    * @return bool
    */
   public function isAync();
+
+  /**
+   * @return bool
+   */
+  public function requiresAuth();
 }

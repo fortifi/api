@@ -30,6 +30,11 @@ class ApiRequest implements IApiRequest
   private $_requestDetail;
 
   /**
+   * @var IApiEndpoint
+   */
+  protected $_endpoint;
+
+  /**
    * @param IApiRequestDetail $requestDetail
    *
    * @return $this
@@ -59,9 +64,31 @@ class ApiRequest implements IApiRequest
     {
       if($this->hasConnection())
       {
-        $this->setRawResult(
-          $this->_getConnection()->load($this)->getRawResult()
-        );
+        if($this->_requestDetail->requiresAuth())
+        {
+          $this->_getConnection()->setToken($this->_endpoint->getToken());
+          try
+          {
+            $result = $this->_getConnection()->load($this);
+          }
+          catch(\Exception $e)
+          {
+            if($e->getCode() == 403 && stristr($e->getMessage(), 'token'))
+            {
+              $result = $this->_getConnection()->load($this);
+            }
+            else
+            {
+              throw $e;
+            }
+          }
+        }
+        else
+        {
+          $result = $this->_getConnection()->load($this);
+        }
+
+        $this->setRawResult($result->getRawResult());
       }
       else
       {
