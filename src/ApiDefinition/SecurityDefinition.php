@@ -182,7 +182,7 @@ class SecurityDefinition
    *
    * @return $this
    */
-  protected function _addScope($name, $description)
+  public function addScope($name, $description)
   {
     $this->_scopes[$name] = $description;
     return $this;
