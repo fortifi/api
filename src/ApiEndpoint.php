@@ -25,6 +25,15 @@ class ApiEndpoint implements IApiEndpoint
    */
   protected $_definition;
 
+  protected function _buildFromEndpoint(ApiEndpoint $endpoint)
+  {
+    $this->setConnection($endpoint->_getConnection());
+    $this->setTokenStorage($endpoint->getTokenStorage());
+    $this->setAccessGrant($endpoint->getAccessGrant());
+    $this->setApiDefinition($endpoint->getApiDefinition());
+    return $this;
+  }
+
   /**
    * @return OAuth\Tokens\IToken|null
    */
