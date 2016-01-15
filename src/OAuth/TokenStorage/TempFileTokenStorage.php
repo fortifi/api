@@ -4,7 +4,7 @@ namespace Fortifi\Api\Core\OAuth\TokenStorage;
 use Fortifi\Api\Core\OAuth\Tokens\IToken;
 use Packaged\Helpers\Path;
 
-class TmpFileTokenStorage implements TokenStorageInterface
+class TempFileTokenStorage implements ITokenStorage
 {
   /**
    * Store a token in storage

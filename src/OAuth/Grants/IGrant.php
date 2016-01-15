@@ -16,4 +16,9 @@ interface IGrant
   public function getToken(
     IApiConnection $connection, SecurityDefinition $definition
   );
+
+  /**
+   * @return string
+   */
+  public function getKey();
 }

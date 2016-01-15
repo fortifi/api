@@ -24,6 +24,14 @@ class ServiceAccountGrant implements IGrant
   }
 
   /**
+   * @inheritDoc
+   */
+  public function getKey()
+  {
+    return substr(md5($this->_apiUser), 6, 10);
+  }
+
+  /**
    * @param mixed $apiSecret
    *
    * @return ServiceAccountGrant

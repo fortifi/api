@@ -61,6 +61,13 @@ interface IApiDefinition
   public function getSecurityDefinitions();
 
   /**
+   * @param string $type Security type e.g. oauth2
+   *
+   * @return SecurityDefinition
+   */
+  public function getSecurityDefinition($type);
+
+  /**
    * @return TagDefinition[]
    */
   public function getTags();

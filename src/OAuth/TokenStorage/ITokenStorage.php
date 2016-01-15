@@ -3,7 +3,7 @@ namespace Fortifi\Api\Core\OAuth\TokenStorage;
 
 use Fortifi\Api\Core\OAuth\Tokens\IToken;
 
-interface TokenStorageInterface
+interface ITokenStorage
 {
   /**
    * Store a token in storage
