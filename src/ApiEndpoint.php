@@ -27,10 +27,19 @@ class ApiEndpoint implements IApiEndpoint
 
   protected function _buildFromEndpoint(ApiEndpoint $endpoint)
   {
-    $this->setConnection($endpoint->_getConnection());
+    if($this->_connection !== null)
+    {
+      $this->setConnection($endpoint->_getConnection());
+    }
     $this->setTokenStorage($endpoint->getTokenStorage());
-    $this->setAccessGrant($endpoint->getAccessGrant());
-    $this->setApiDefinition($endpoint->getApiDefinition());
+    if($this->_grant !== null)
+    {
+      $this->setAccessGrant($endpoint->getAccessGrant());
+    }
+    if($this->_definition !== null)
+    {
+      $this->setApiDefinition($endpoint->getApiDefinition());
+    }
     return $this;
   }
 
@@ -39,11 +48,6 @@ class ApiEndpoint implements IApiEndpoint
    */
   public function getToken()
   {
-    if($this->_tokenStorage === null)
-    {
-      $this->setTokenStorage(new TempFileTokenStorage());
-    }
-
     if($this->_connection === null || $this->_grant === null)
     {
       throw new \RuntimeException(
@@ -51,7 +55,7 @@ class ApiEndpoint implements IApiEndpoint
         . ' on the endpoint before requesting a token'
       );
     }
-    return $this->_tokenStorage->retrieveToken(
+    return $this->getTokenStorage()->retrieveToken(
       $this->_grant->getKey(),
       function ()
       {
@@ -105,6 +109,10 @@ class ApiEndpoint implements IApiEndpoint
    */
   public function getTokenStorage()
   {
+    if($this->_tokenStorage === null)
+    {
+      $this->setTokenStorage(new TempFileTokenStorage());
+    }
     return $this->_tokenStorage;
   }
 
