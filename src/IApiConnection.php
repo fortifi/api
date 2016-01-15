@@ -1,6 +1,8 @@
 <?php
 namespace Fortifi\Api\Core;
 
+use Fortifi\Api\Core\OAuth\Tokens\IToken;
+
 interface IApiConnection
 {
   /**
@@ -25,9 +27,9 @@ interface IApiConnection
   public function setOrganisationFid($fid);
 
   /**
-   * @param string $token Access Token
+   * @param IToken $token Access Token
    *
    * @return $this
    */
-  public function setAccessToken($token);
+  public function setToken(IToken $token);
 }

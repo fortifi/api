@@ -3,11 +3,16 @@ namespace Fortifi\Api\Core\Connections;
 
 use Fortifi\Api\Core\IApiConnection;
 use Fortifi\Api\Core\IApiRequestDetail;
+use Fortifi\Api\Core\OAuth\Tokens\IToken;
 
 abstract class AbstractConnection implements IApiConnection
 {
   protected $_orgFid;
-  protected $_accessToken;
+
+  /**
+   * @var IToken
+   */
+  protected $_token;
 
   /**
    * @param string $fid Organisation FID
@@ -21,13 +26,13 @@ abstract class AbstractConnection implements IApiConnection
   }
 
   /**
-   * @param string $token Access Token
+   * @param IToken $token Access Token
    *
    * @return $this
    */
-  public function setAccessToken($token)
+  public function setToken(IToken $token)
   {
-    $this->_accessToken = $token;
+    $this->_token = $token;
     return $this;
   }
 
@@ -39,9 +44,10 @@ abstract class AbstractConnection implements IApiConnection
       $headers['X-Fortifi-Org'] = $this->_orgFid;
     }
 
-    if(!empty($this->_accessToken))
+    if($this->_token)
     {
-      $headers['Authorization'] = 'Bearer ' . $this->_accessToken;
+      $headers['Authorization'] = $this->_token->getType()
+        . ' ' . $this->_token->getToken();
     }
 
     if($request->getRequestBody())
