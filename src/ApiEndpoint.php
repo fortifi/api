@@ -35,7 +35,7 @@ class ApiEndpoint implements IApiEndpoint
     {
       $schemas = $this->_definition->getSchemas();
       rsort($schemas);
-      $this->_baseUrl = reset($schemas);
+      $this->_baseUrl = reset($schemas) . '://';
       $this->_baseUrl .= $this->_definition->getHost();
       $this->_baseUrl .= '/' . ltrim($this->_definition->getBasePath(), '/');
     }
