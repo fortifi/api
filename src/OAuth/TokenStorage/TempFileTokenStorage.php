@@ -34,9 +34,15 @@ class TempFileTokenStorage implements ITokenStorage
   public function retrieveToken($key, callable $retrieve = null)
   {
     $location = $this->_createFileName($key);
+    $token = null;
     if(file_exists($location))
     {
-      return unserialize(file_get_contents($location));
+      $token = unserialize(file_get_contents($location));
+    }
+
+    if($token instanceof IToken && $token->getExpiryTime() > time() + 60)
+    {
+      return $token;
     }
 
     if($retrieve !== null)
@@ -45,11 +51,10 @@ class TempFileTokenStorage implements ITokenStorage
       if($token instanceof IToken)
       {
         $this->storeToken($key, $token);
-        return $token;
       }
     }
 
-    return null;
+    return $token instanceof IToken ? $token : null;
   }
 
   /**

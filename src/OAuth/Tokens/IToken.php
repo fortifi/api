@@ -6,4 +6,6 @@ interface IToken
   public function getType();
 
   public function getToken();
+
+  public function getExpiryTime();
 }
