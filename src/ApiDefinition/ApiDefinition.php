@@ -3,6 +3,7 @@ namespace Fortifi\Api\Core\ApiDefinition;
 
 class ApiDefinition implements IApiDefinition
 {
+  protected $_originalHost;
   protected $_title;
   protected $_version;
   protected $_termsOfService;
@@ -116,6 +117,10 @@ class ApiDefinition implements IApiDefinition
    */
   public function setHost($host)
   {
+    if(empty($this->_originalHost))
+    {
+      $this->_originalHost = $host;
+    }
     $this->_host = $host;
     return $this;
   }
@@ -241,8 +246,52 @@ class ApiDefinition implements IApiDefinition
    */
   public function addSecurityDefinition(SecurityDefinition $securityDefinition)
   {
-    $this->_securityDefinitions[] = $securityDefinition;
+    $this->_securityDefinitions[$securityDefinition->getType(
+    )] = $securityDefinition;
     return $this;
+  }
+
+  /**
+   * @param $type
+   *
+   * @return SecurityDefinition|null
+   */
+  public function getSecurityDefinition($type)
+  {
+    if(isset($this->_securityDefinitions[$type]))
+    {
+      $def = $this->_securityDefinitions[$type];
+      $def->setTokenUrl($this->_replaceHost($def->getTokenUrl()));
+      $def->setAuthorizationUrl(
+        $this->_replaceHost($def->getAuthorizationUrl())
+      );
+      return $def;
+    }
+    return null;
+  }
+
+  protected function _replaceHost($url)
+  {
+    if($this->_originalHost == $this->_host)
+    {
+      return $url;
+    }
+
+    if(stristr($url, $this->_originalHost))
+    {
+      $url = str_replace($this->_originalHost, $this->_host, $url);
+    }
+
+    if(stristr($url, 'https') && !in_array('https', $this->_schemas))
+    {
+      $url = str_replace('https', 'http', $url);
+    }
+    else if(stristr($url, 'http') && !in_array('http', $this->_schemas))
+    {
+      $url = str_replace('http', 'https', $url);
+    }
+
+    return $url;
   }
 
   /**
