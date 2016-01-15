@@ -27,19 +27,26 @@ class ApiEndpoint implements IApiEndpoint
 
   protected function _buildFromEndpoint(ApiEndpoint $endpoint)
   {
-    if($this->_connection !== null)
-    {
-      $this->setConnection($endpoint->_getConnection());
-    }
     $this->setTokenStorage($endpoint->getTokenStorage());
-    if($this->_grant !== null)
+
+    $conn = $endpoint->_getConnection();
+    if($conn !== null)
     {
-      $this->setAccessGrant($endpoint->getAccessGrant());
+      $this->setConnection($conn);
     }
-    if($this->_definition !== null)
+
+    $grant = $endpoint->getAccessGrant();
+    if($grant !== null)
     {
-      $this->setApiDefinition($endpoint->getApiDefinition());
+      $this->setAccessGrant($grant);
     }
+
+    $def = $endpoint->getApiDefinition();
+    if($def !== null)
+    {
+      $this->setApiDefinition($def);
+    }
+
     return $this;
   }
 
