@@ -210,6 +210,17 @@ class ApiRequest implements IApiRequest
   }
 
   /**
+   * @param IApiEndpoint $endpoint
+   *
+   * @return ApiRequest
+   */
+  public function setEndpoint($endpoint)
+  {
+    $this->_endpoint = $endpoint;
+    return $this;
+  }
+
+  /**
    * @inheritDoc
    */
   public function hasResult()
