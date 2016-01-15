@@ -3,25 +3,25 @@ namespace Fortifi\Api\Core\ApiDefinition;
 
 class TagDefinition
 {
-  public $name;
-  public $description;
+  protected $_name;
+  protected $_description;
 
   /**
    * @return mixed
    */
   public function getName()
   {
-    return $this->name;
+    return $this->_name;
   }
 
   /**
-   * @param mixed $name
+   * @param mixed $_name
    *
    * @return TagDefinition
    */
-  public function setName($name)
+  public function setName($_name)
   {
-    $this->name = $name;
+    $this->_name = $_name;
     return $this;
   }
 
@@ -30,17 +30,17 @@ class TagDefinition
    */
   public function getDescription()
   {
-    return $this->description;
+    return $this->_description;
   }
 
   /**
-   * @param mixed $description
+   * @param mixed $_description
    *
    * @return TagDefinition
    */
-  public function setDescription($description)
+  public function setDescription($_description)
   {
-    $this->description = $description;
+    $this->_description = $_description;
     return $this;
   }
 

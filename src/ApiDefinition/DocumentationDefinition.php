@@ -3,25 +3,25 @@ namespace Fortifi\Api\Core\ApiDefinition;
 
 class DocumentationDefinition
 {
-  public $description;
-  public $url;
+  protected $_description;
+  protected $_url;
 
   /**
    * @return mixed
    */
   public function getDescription()
   {
-    return $this->description;
+    return $this->_description;
   }
 
   /**
-   * @param mixed $description
+   * @param mixed $_description
    *
    * @return DocumentationDefinition
    */
-  public function setDescription($description)
+  public function setDescription($_description)
   {
-    $this->description = $description;
+    $this->_description = $_description;
     return $this;
   }
 
@@ -30,17 +30,17 @@ class DocumentationDefinition
    */
   public function getUrl()
   {
-    return $this->url;
+    return $this->_url;
   }
 
   /**
-   * @param mixed $url
+   * @param mixed $_url
    *
    * @return DocumentationDefinition
    */
-  public function setUrl($url)
+  public function setUrl($_url)
   {
-    $this->url = $url;
+    $this->_url = $_url;
     return $this;
   }
 
