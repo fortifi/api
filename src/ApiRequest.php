@@ -70,6 +70,14 @@ class ApiRequest implements IApiRequest
           try
           {
             $result = $this->_getConnection()->load($this);
+            if($result->getRawResult()->getStatusCode() == 403)
+            {
+              $msg = $result->getRawResult()->getStatusMessage();
+              throw new \Exception(
+                $msg == 'OK' ? 'Invalid token' : $msg,
+                403
+              );
+            }
           }
           catch(\Exception $e)
           {
