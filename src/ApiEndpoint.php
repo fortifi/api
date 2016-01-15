@@ -73,6 +73,14 @@ class ApiEndpoint implements IApiEndpoint
   }
 
   /**
+   * @return IGrant
+   */
+  public function getAccessGrant()
+  {
+    return $this->_grant;
+  }
+
+  /**
    * @param ITokenStorage $storage
    *
    * @return $this
