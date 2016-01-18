@@ -282,9 +282,12 @@ class ApiDefinition implements IApiDefinition
       $url = str_replace($this->_originalHost, $this->_host, $url);
     }
 
-    if(stristr($url, 'https') && !in_array('https', $this->_schemas))
+    if(stristr($url, 'https'))
     {
-      $url = str_replace('https', 'http', $url);
+      if(!in_array('https', $this->_schemas))
+      {
+        $url = str_replace('https', 'http', $url);
+      }
     }
     else if(stristr($url, 'http') && !in_array('http', $this->_schemas))
     {
