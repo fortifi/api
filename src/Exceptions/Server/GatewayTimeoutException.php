@@ -7,9 +7,13 @@ class GatewayTimeoutException extends ServerApiException
    * @inheritDoc
    */
   public function __construct(
-    $message = 'Gateway Exception', $code = 504, \Exception $previous = null
+    $message = '', $code = 504, \Exception $previous = null
   )
   {
+    if(empty($message))
+    {
+      $message = 'Gateway Exception';
+    }
     parent::__construct($message, $code, $previous);
   }
 }

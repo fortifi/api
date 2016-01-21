@@ -7,9 +7,13 @@ class BadApiRequestException extends ClientApiException
    * @inheritDoc
    */
   public function __construct(
-    $message = 'Bad Request', $code = 400, \Exception $previous = null
+    $message = '', $code = 400, \Exception $previous = null
   )
   {
+    if(empty($message))
+    {
+      $message = 'Bad Request';
+    }
     parent::__construct($message, $code, $previous);
   }
 }

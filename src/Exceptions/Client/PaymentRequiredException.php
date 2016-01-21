@@ -7,9 +7,13 @@ class PaymentRequiredException extends ClientApiException
    * @inheritDoc
    */
   public function __construct(
-    $message = 'Payment Required', $code = 402, \Exception $previous = null
+    $message = '', $code = 402, \Exception $previous = null
   )
   {
+    if(empty($message))
+    {
+      $message = 'Payment Required';
+    }
     parent::__construct($message, $code, $previous);
   }
 }

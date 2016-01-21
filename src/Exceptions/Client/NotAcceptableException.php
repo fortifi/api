@@ -7,9 +7,13 @@ class NotAcceptableException extends ClientApiException
    * @inheritDoc
    */
   public function __construct(
-    $message = 'Not Acceptable', $code = 406, \Exception $previous = null
+    $message = '', $code = 406, \Exception $previous = null
   )
   {
+    if(empty($message))
+    {
+      $message = 'Not Acceptable';
+    }
     parent::__construct($message, $code, $previous);
   }
 }

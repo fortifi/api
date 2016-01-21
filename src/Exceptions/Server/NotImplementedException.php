@@ -7,9 +7,13 @@ class NotImplementedException extends ServerApiException
    * @inheritDoc
    */
   public function __construct(
-    $message = 'Not Implemented', $code = 501, \Exception $previous = null
+    $message = '', $code = 501, \Exception $previous = null
   )
   {
+    if(empty($message))
+    {
+      $message = 'Not Implemented';
+    }
     parent::__construct($message, $code, $previous);
   }
 }
