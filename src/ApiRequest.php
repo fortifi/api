@@ -86,7 +86,6 @@ class ApiRequest implements IApiRequest
             if($e->getCode() == 403 && stristr($e->getMessage(), 'token'))
             {
               $result = $this->_getConnection()->load($this);
-              $result = $this->_getConnection()->load($this);
             }
             else
             {
@@ -123,7 +122,7 @@ class ApiRequest implements IApiRequest
       return $this->_result;
     }
 
-    throw new \Exception("Invalid API Result Stored", 500);
+    throw new ClientApiException("Invalid API Result Stored", 418);
   }
 
   protected function _getResultJson()
