@@ -2,6 +2,10 @@
 namespace Fortifi\Api\Core\Connections;
 
 use Fortifi\Api\Core\ApiResult;
+use Fortifi\Api\Core\Exceptions\ApiException;
+use Fortifi\Api\Core\Exceptions\Client\RequestTimeoutException;
+use Fortifi\Api\Core\Exceptions\Server\ServerApiException;
+use Fortifi\Api\Core\Exceptions\Server\ServiceUnavailableException;
 use Fortifi\Api\Core\IApiRequest;
 use Fortifi\Api\Core\IApiResult;
 
@@ -13,18 +17,53 @@ class RequestsConnection extends AbstractConnection
   public function load(IApiRequest $request)
   {
     $req = $request->getRequestDetail();
-    $response = \Requests::request(
-      $req->getUrl(),
-      $this->_buildHeaders($req),
-      $this->_buildData($req),
-      $req->getMethod(),
-      $req->getOptions()
-    );
 
-    $result = $this->_getResult($response);
+    try
+    {
+      $response = \Requests::request(
+        $req->getUrl(),
+        $this->_buildHeaders($req),
+        $this->_buildData($req),
+        $req->getMethod(),
+        $req->getOptions()
+      );
 
-    $request->setRawResult($result);
-    return $request;
+      $result = $this->_getResult($response);
+
+      $request->setRawResult($result);
+      return $request;
+    }
+    catch(\Exception $e)
+    {
+      $this->_handleException($e);
+    }
+  }
+
+  protected function _handleException(\Exception $e)
+  {
+    try
+    {
+      throw $e;
+    }
+    catch(\Requests_Exception $e)
+    {
+      if(is_resource($e->getData()))
+      {
+        $errNo = curl_errno($e->getData());
+        switch($errNo)
+        {
+          case 7:
+            throw new ServiceUnavailableException($e->getMessage(), 503, $e);
+          case 28:
+            throw new RequestTimeoutException($e->getMessage(), 408, $e);
+        }
+      }
+    }
+    catch(ApiException $e)
+    {
+      throw $e;
+    }
+    throw new ServerApiException($e->getMessage(), 500, $e);
   }
 
   /**
@@ -53,14 +92,22 @@ class RequestsConnection extends AbstractConnection
         $batchRequests[$i] = $batchReq;
       }
     }
-    $responses = \Requests::request_multiple($batchRequests);
 
-    foreach($responses as $id => $response)
+    try
     {
-      $originals[$id]->setRawResult($this->_getResult($response));
-    }
+      $responses = \Requests::request_multiple($batchRequests);
 
-    return $this;
+      foreach($responses as $id => $response)
+      {
+        $originals[$id]->setRawResult($this->_getResult($response));
+      }
+
+      return $this;
+    }
+    catch(\Exception $e)
+    {
+      $this->_handleException($e);
+    }
   }
 
   /**
