@@ -1,6 +1,9 @@
 <?php
 namespace Fortifi\Api\Core;
 
+use Fortifi\Api\Core\Exceptions\ApiException;
+use Fortifi\Api\Core\Exceptions\Client\ClientApiException;
+use Fortifi\Api\Core\Exceptions\Client\ForbiddenException;
 use Packaged\Helpers\ValueAs;
 
 class ApiRequest implements IApiRequest
@@ -73,9 +76,8 @@ class ApiRequest implements IApiRequest
             if($result->getRawResult()->getStatusCode() == 403)
             {
               $msg = $result->getRawResult()->getStatusMessage();
-              throw new \Exception(
-                $msg == 'OK' ? 'Invalid token' : $msg,
-                403
+              throw new ForbiddenException(
+                $msg == 'OK' ? 'Invalid token' : $msg
               );
             }
           }
@@ -84,10 +86,11 @@ class ApiRequest implements IApiRequest
             if($e->getCode() == 403 && stristr($e->getMessage(), 'token'))
             {
               $result = $this->_getConnection()->load($this);
+              $result = $this->_getConnection()->load($this);
             }
             else
             {
-              throw $e;
+              throw ApiException::build($e->getCode(), $e->getMessage(), $e);
             }
           }
         }
@@ -100,7 +103,7 @@ class ApiRequest implements IApiRequest
       }
       else
       {
-        throw new \Exception("No API Connection Available", 500);
+        throw new ClientApiException("No API Connection Available", 428);
       }
     }
 
@@ -110,9 +113,9 @@ class ApiRequest implements IApiRequest
       {
         if($this->_result->getStatusCode() !== 200)
         {
-          throw new \Exception(
-            $this->_result->getStatusMessage(),
-            $this->_result->getStatusCode()
+          throw ApiException::build(
+            $this->_result->getStatusCode(),
+            $this->_result->getStatusMessage()
           );
         }
       }
