@@ -1,7 +1,9 @@
 <?php
 namespace Fortifi\Api\Core;
 
-class ApiRequestDetail implements IApiRequestDetail
+use Packaged\Helpers\Objects;
+
+class ApiRequestDetail implements IApiRequestDetail, \JsonSerializable
 {
   protected $_url = '';
   protected $_headers = [];
@@ -248,6 +250,40 @@ class ApiRequestDetail implements IApiRequestDetail
   public function requiresAuth()
   {
     return (bool)$this->_requireAuth;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public function jsonSerialize()
+  {
+    return [
+      'url'         => $this->_url,
+      'headers'     => $this->_headers,
+      'options'     => $this->_options,
+      'post'        => $this->_post,
+      'query'       => $this->_query,
+      'body'        => $this->_body,
+      'method'      => $this->_method,
+      'isAsync'     => $this->_isAsync,
+      'requireAuth' => $this->_requireAuth,
+    ];
+  }
+
+  public static function fromJson($json)
+  {
+    $obj = is_scalar($json) ? json_decode($json) : $json;
+    $requestDetail = new static;
+    $requestDetail->_url = Objects::property($obj, 'url');
+    $requestDetail->_headers = Objects::property($obj, 'headers');
+    $requestDetail->_options = Objects::property($obj, 'options');
+    $requestDetail->_post = Objects::property($obj, 'post');
+    $requestDetail->_query = Objects::property($obj, 'query');
+    $requestDetail->_body = Objects::property($obj, 'body');
+    $requestDetail->_method = Objects::property($obj, 'method');
+    $requestDetail->_isAsync = Objects::property($obj, 'isAsync');
+    $requestDetail->_requireAuth = Objects::property($obj, 'requireAuth');
+    return $requestDetail;
   }
 
 }
