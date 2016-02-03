@@ -39,6 +39,8 @@ abstract class AbstractConnection implements IApiConnection
   protected function _buildHeaders(IApiRequestDetail $request)
   {
     $headers = $request->getHeaders();
+    $headers['Expect'] = '';
+
     if(!empty($this->_orgFid))
     {
       $headers['X-Fortifi-Org'] = $this->_orgFid;
