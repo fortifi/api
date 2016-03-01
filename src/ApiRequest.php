@@ -72,6 +72,7 @@ class ApiRequest implements IApiRequest
           $this->_getConnection()->setToken($this->_endpoint->getToken());
           try
           {
+            $this->_result = false;
             $result = $this->_getConnection()->load($this);
             if($result->getRawResult()->getStatusCode() == 403)
             {
