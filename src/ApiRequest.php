@@ -49,7 +49,7 @@ class ApiRequest implements IApiRequest
   }
 
   /**
-   * @inheritDoc
+   * @inheritdoc
    */
   public function setRawResult(IApiResult $result)
   {
@@ -58,8 +58,7 @@ class ApiRequest implements IApiRequest
   }
 
   /**
-   * @return IApiResult|null
-   * @throws \Exception
+   * @inheritdoc
    */
   public function getRawResult()
   {
@@ -77,9 +76,10 @@ class ApiRequest implements IApiRequest
             if($result->getRawResult()->getStatusCode() == 403)
             {
               $msg = $result->getRawResult()->getStatusMessage();
-              throw new ForbiddenException(
+              $this->_result = new ForbiddenException(
                 $msg == 'OK' ? 'Invalid token' : $msg
               );
+              throw $this->_result;
             }
           }
           catch(\Exception $e)
@@ -90,7 +90,12 @@ class ApiRequest implements IApiRequest
             }
             else
             {
-              throw ApiException::build($e->getCode(), $e->getMessage(), $e);
+              $this->_result = ApiException::build(
+                $e->getCode(),
+                $e->getMessage(),
+                $e
+              );
+              throw $this->_result;
             }
           }
         }
@@ -107,6 +112,10 @@ class ApiRequest implements IApiRequest
       }
     }
 
+    if($this->_result instanceof \Exception)
+    {
+      throw $this->_result;
+    }
     if($this->_result instanceof IApiResult)
     {
       if($this->shouldThrowExceptions())
@@ -232,11 +241,10 @@ class ApiRequest implements IApiRequest
   }
 
   /**
-   * @inheritDoc
+   * @inheritdoc
    */
   public function hasResult()
   {
     return $this->_result !== null;
   }
-
 }
