@@ -66,6 +66,6 @@ class TempFileTokenStorage implements ITokenStorage
    */
   private function _createFileName($key)
   {
-    return Path::build(sys_get_temp_dir(), 'Fortifi-Token-' . $key);
+    return Path::build(sys_get_temp_dir(), 'Fortifi-API-Token-' . $key);
   }
 }
