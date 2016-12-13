@@ -51,7 +51,7 @@ class MemcachedTokenStorage implements ITokenStorage
 
     if($cacheToken && $cacheToken !== false)
     {
-      $token = $token = unserialize($cacheToken);
+      $token = unserialize($cacheToken);
     }
 
     if($token instanceof IToken && $token->getExpiryTime() > time() + 60)
