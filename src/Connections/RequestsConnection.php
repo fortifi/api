@@ -11,6 +11,17 @@ use Fortifi\Api\Core\IApiResult;
 
 class RequestsConnection extends AbstractConnection
 {
+  protected $_timeout = 20;
+
+  /**
+   * @inheritDoc
+   */
+  public function setTimeout($timout = 20)
+  {
+    $this->_timeout = $timout;
+    return $this;
+  }
+
   /**
    * @inheritDoc
    */
@@ -25,7 +36,7 @@ class RequestsConnection extends AbstractConnection
         $this->_buildHeaders($req),
         $this->_buildData($req),
         $req->getMethod(),
-        $req->getOptions()
+        array_merge(['timeout' => $this->_timeout], (array)$req->getOptions())
       );
 
       $result = $this->_getResult($response);
