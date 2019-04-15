@@ -64,8 +64,7 @@ class ApiEndpoint implements IApiEndpoint
     }
     return $this->getTokenStorage()->retrieveToken(
       $this->_grant->getKey(),
-      function ()
-      {
+      function () {
         return $this->_grant->getToken(
           $this->_getConnection(),
           $this->_definition->getSecurityDefinition('oauth2')
@@ -142,7 +141,7 @@ class ApiEndpoint implements IApiEndpoint
       $this->_baseUrl .= '/' . ltrim($this->_definition->getBasePath(), '/');
     }
 
-    return Path::buildUnix($this->_baseUrl, $path);
+    return Path::unix($this->_baseUrl, $path);
   }
 
   /**
