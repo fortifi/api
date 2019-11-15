@@ -8,6 +8,9 @@ use Fortifi\Api\Core\Exceptions\Server\ServerApiException;
 use Fortifi\Api\Core\Exceptions\Server\ServiceUnavailableException;
 use Fortifi\Api\Core\IApiRequest;
 use Fortifi\Api\Core\IApiResult;
+use Requests;
+use Requests_Hooks;
+use function in_array;
 
 class RequestsConnection extends AbstractConnection
 {
@@ -31,7 +34,19 @@ class RequestsConnection extends AbstractConnection
 
     try
     {
-      $response = \Requests::request(
+      $hooker = new Requests_Hooks();
+      $hooker->register(
+        'requests.before_request',
+        function ($url, &$headers, $data, $method) {
+          if(in_array($method, [Requests::PATCH, Requests::PUT, Requests::DELETE]) && empty($data))
+          {
+            // Prevent 411 errors from some servers
+            $headers['Content-Length'] = 0;
+          }
+        }
+      );
+
+      $response = Requests::request(
         $req->getUrl(),
         $this->_buildHeaders($req),
         $this->_buildData($req),
