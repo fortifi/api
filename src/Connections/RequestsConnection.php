@@ -35,7 +35,7 @@ class RequestsConnection extends AbstractConnection
     {
       $headers = $this->_buildHeaders($req);
       $data = $this->_buildData($req);
-      if(empty(array_filter($data)))
+      if(!$data || (is_array($data) && empty(array_filter($data))))
       {
         // Prevent 411 errors from some servers
         $headers['Content-Length'] = 0;
