@@ -32,4 +32,9 @@ interface IApiConnection
    * @return $this
    */
   public function setToken(IToken $token);
+
+  /**
+   * @return $this
+   */
+  public function clearToken();
 }

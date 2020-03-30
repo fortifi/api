@@ -36,6 +36,12 @@ abstract class AbstractConnection implements IApiConnection
     return $this;
   }
 
+  public function clearToken()
+  {
+    $this->_token = null;
+    return $this;
+  }
+
   protected function _buildHeaders(IApiRequestDetail $request)
   {
     $headers = $request->getHeaders();

@@ -16,4 +16,6 @@ interface IApiEndpoint extends IApiConnectionAware
    * @return OAuth\Tokens\IToken|null
    */
   public function getToken();
+
+  public function clearToken();
 }

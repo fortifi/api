@@ -57,6 +57,12 @@ class TempFileTokenStorage implements ITokenStorage
     return $token instanceof IToken ? $token : null;
   }
 
+  public function clearToken($key)
+  {
+    $location = $this->_createFileName($key);
+    unlink($location);
+  }
+
   /**
    * Create a temporary filename
    *

@@ -25,4 +25,11 @@ interface ITokenStorage
    * @return IToken|null
    */
   public function retrieveToken($key, callable $retrieve = null);
+
+  /**
+   * Clear the token, forcing revalidation
+   *
+   * @param string $key location key for token
+   */
+  public function clearToken($key);
 }
