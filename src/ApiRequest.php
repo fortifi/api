@@ -4,6 +4,7 @@ namespace Fortifi\Api\Core;
 use Fortifi\Api\Core\Exceptions\ApiException;
 use Fortifi\Api\Core\Exceptions\Client\ClientApiException;
 use Fortifi\Api\Core\Exceptions\Client\ForbiddenException;
+use Packaged\Helpers\RetryHelper;
 use Packaged\Helpers\ValueAs;
 
 class ApiRequest implements IApiRequest
@@ -58,57 +59,61 @@ class ApiRequest implements IApiRequest
   }
 
   /**
+   * @return IApiResult
+   * @throws ClientApiException
+   * @throws ForbiddenException
+   */
+  protected function _getRawResult()
+  {
+    if($this->hasConnection())
+    {
+      if($this->_requestDetail->requiresAuth())
+      {
+        $this->_getConnection()->setToken($this->_endpoint->getToken());
+        $result = $this->_getConnection()->load($this);
+        if($result->getRawResult()->getStatusCode() == 403)
+        {
+          $msg = $result->getRawResult()->getStatusMessage();
+          throw new ForbiddenException($msg == 'OK' ? 'Invalid token' : $msg);
+        }
+        return $result->getRawResult();
+      }
+
+      return $this->_getConnection()->load($this)->getRawResult();
+    }
+    throw new ClientApiException("No API Connection Available", 428);
+  }
+
+  /**
    * @inheritdoc
    */
   public function getRawResult()
   {
     if($this->_result === null)
     {
-      if($this->hasConnection())
+      try
       {
-        if($this->_requestDetail->requiresAuth())
-        {
-          $this->_getConnection()->setToken($this->_endpoint->getToken());
-          try
-          {
-            $this->_result = false;
-            $result = $this->_getConnection()->load($this);
-            if($result->getRawResult()->getStatusCode() == 403)
-            {
-              $msg = $result->getRawResult()->getStatusMessage();
-              $this->_result = new ForbiddenException(
-                $msg == 'OK' ? 'Invalid token' : $msg
-              );
-              throw $this->_result;
-            }
-          }
-          catch(\Exception $e)
-          {
+        $rawResult = RetryHelper::retry(
+          1,
+          function () {
+            return $this->_getRawResult();
+          },
+          function (\Exception $e) {
             if($e->getCode() == 403 && stristr($e->getMessage(), 'token'))
             {
-              $result = $this->_getConnection()->load($this);
+              $this->_getConnection()->clearToken();
             }
-            else
-            {
-              $this->_result = ApiException::build(
-                $e->getCode(),
-                $e->getMessage(),
-                $e
-              );
-              throw $this->_result;
-            }
+            return true;
           }
-        }
-        else
-        {
-          $result = $this->_getConnection()->load($this);
-        }
-
-        $this->setRawResult($result->getRawResult());
+        );
       }
-      else
+      catch(\Exception $e)
       {
-        throw new ClientApiException("No API Connection Available", 428);
+        $rawResult = ApiException::build(
+          $e->getCode(),
+          $e->getMessage(),
+          $e
+        );
       }
     }
 

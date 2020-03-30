@@ -70,4 +70,9 @@ class MemcachedTokenStorage implements ITokenStorage
 
     return $token instanceof IToken ? $token : null;
   }
+
+  public function clearToken($key)
+  {
+    $this->_connection->delete($this->_cacheKey($key));
+  }
 }
