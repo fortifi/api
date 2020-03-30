@@ -69,8 +69,8 @@ class ApiRequest implements IApiRequest
     {
       if($this->_requestDetail->requiresAuth())
       {
-        $this->_getConnection()->setToken($this->_endpoint->getToken());
-        $result = $this->_getConnection()->load($this);
+        $this->_connection->setToken($this->_endpoint->getToken());
+        $result = $this->_connection->load($this);
         if($result->getRawResult()->getStatusCode() == 403)
         {
           $msg = $result->getRawResult()->getStatusMessage();
@@ -79,7 +79,7 @@ class ApiRequest implements IApiRequest
         return $result->getRawResult();
       }
 
-      return $this->_getConnection()->load($this)->getRawResult();
+      return $this->_connection->load($this)->getRawResult();
     }
     throw new ClientApiException("No API Connection Available", 428);
   }
@@ -93,7 +93,7 @@ class ApiRequest implements IApiRequest
     {
       try
       {
-        $rawResult = RetryHelper::retry(
+        $this->_result = RetryHelper::retry(
           1,
           function () {
             return $this->_getRawResult();
@@ -101,7 +101,8 @@ class ApiRequest implements IApiRequest
           function (\Exception $e) {
             if($e->getCode() == 403 && stristr($e->getMessage(), 'token'))
             {
-              $this->_getConnection()->clearToken();
+              $this->_connection->clearToken();
+              $this->_endpoint->clearToken();
             }
             return true;
           }
@@ -109,11 +110,7 @@ class ApiRequest implements IApiRequest
       }
       catch(\Exception $e)
       {
-        $rawResult = ApiException::build(
-          $e->getCode(),
-          $e->getMessage(),
-          $e
-        );
+        $this->_result = ApiException::build($e->getCode(), $e->getMessage(), $e);
       }
     }
 

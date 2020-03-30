@@ -73,6 +73,19 @@ class ApiEndpoint implements IApiEndpoint
     );
   }
 
+  public function clearToken()
+  {
+    $connection = $this->_getConnection();
+    if($connection)
+    {
+      $connection->clearToken();
+    }
+    if($this->_grant !== null)
+    {
+      $this->getTokenStorage()->clearToken($this->_grant->getKey());
+    }
+  }
+
   public function setApiDefinition(IApiDefinition $definition)
   {
     $this->_definition = $definition;
