@@ -60,7 +60,7 @@ class TempFileTokenStorage implements ITokenStorage
   public function clearToken($key)
   {
     $location = $this->_createFileName($key);
-    unset($location);
+    unlink($location);
   }
 
   /**
