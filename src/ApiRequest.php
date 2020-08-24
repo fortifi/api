@@ -1,11 +1,14 @@
 <?php
 namespace Fortifi\Api\Core;
 
+use Exception;
 use Fortifi\Api\Core\Exceptions\ApiException;
 use Fortifi\Api\Core\Exceptions\Client\ClientApiException;
+use Fortifi\Api\Core\Exceptions\Client\ConflictException;
 use Fortifi\Api\Core\Exceptions\Client\ForbiddenException;
 use Packaged\Helpers\RetryHelper;
 use Packaged\Helpers\ValueAs;
+use stdClass;
 
 class ApiRequest implements IApiRequest
 {
@@ -20,7 +23,7 @@ class ApiRequest implements IApiRequest
   private $_connection;
 
   /**
-   * @var \stdClass
+   * @var stdClass
    */
   private $_decoded;
 
@@ -98,7 +101,7 @@ class ApiRequest implements IApiRequest
           function () {
             return $this->_getRawResult();
           },
-          function (\Exception $e) {
+          function (Exception $e) {
             if($e->getCode() == 403 && stristr($e->getMessage(), 'token'))
             {
               $this->_connection->clearToken();
@@ -108,13 +111,13 @@ class ApiRequest implements IApiRequest
           }
         );
       }
-      catch(\Exception $e)
+      catch(Exception $e)
       {
         $this->_result = ApiException::build($e->getCode(), $e->getMessage(), $e);
       }
     }
 
-    if($this->_result instanceof \Exception)
+    if($this->_result instanceof Exception)
     {
       throw $this->_result;
     }
@@ -124,10 +127,13 @@ class ApiRequest implements IApiRequest
       {
         if($this->_result->getStatusCode() !== 200)
         {
-          throw ApiException::build(
-            $this->_result->getStatusCode(),
-            $this->_result->getStatusMessage()
-          );
+          $exception = ApiException::build($this->_result->getStatusCode(), $this->_result->getStatusMessage());
+          if($exception instanceof ConflictException)
+          {
+            $exception->handleHeaders($this->_result->getHeaders());
+          }
+
+          throw $exception;
         }
       }
 
@@ -164,7 +170,7 @@ class ApiRequest implements IApiRequest
     {
       return $this->getRawResult()->getStatusCode() == 200;
     }
-    catch(\Exception $e)
+    catch(Exception $e)
     {
       return false;
     }

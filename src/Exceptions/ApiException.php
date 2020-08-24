@@ -1,6 +1,7 @@
 <?php
 namespace Fortifi\Api\Core\Exceptions;
 
+use Exception;
 use Fortifi\Api\Core\Exceptions\Client\BadApiRequestException;
 use Fortifi\Api\Core\Exceptions\Client\ClientApiException;
 use Fortifi\Api\Core\Exceptions\Client\ConflictException;
@@ -21,11 +22,9 @@ use Fortifi\Api\Core\Exceptions\Server\NotImplementedException;
 use Fortifi\Api\Core\Exceptions\Server\ServerApiException;
 use Fortifi\Api\Core\Exceptions\Server\ServiceUnavailableException;
 
-class ApiException extends \Exception
+class ApiException extends Exception
 {
-  public static function build(
-    $code, $message = null, \Exception $previous = null
-  )
+  public static function build($code, $message = null, Exception $previous = null)
   {
     switch((int)$code)
     {
@@ -44,11 +43,7 @@ class ApiException extends \Exception
       case 406:
         return new NotAcceptableException($message, $code, $previous);
       case 407:
-        return new ProxyAuthenticationRequiredException(
-          $message,
-          $code,
-          $previous
-        );
+        return new ProxyAuthenticationRequiredException($message, $code, $previous);
       case 408:
         return new RequestTimeoutException($message, $code, $previous);
       case 409:
