@@ -19,8 +19,8 @@ class ConflictException extends ClientApiException
 
   public function handleHeaders(array $headers)
   {
-    $this->field = $headers['X-fortifi-conflict-field'];
-    $this->value = $headers['X-fortifi-conflict-value'];
-    $this->owner = $headers['X-fortifi-conflict-owner'];
+    $this->field = $headers['x-fortifi-conflict-field'][0];
+    $this->value = $headers['x-fortifi-conflict-value'][0];
+    $this->owner = $headers['x-fortifi-conflict-owner'][0];
   }
 }
