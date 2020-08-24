@@ -2,6 +2,7 @@
 namespace Fortifi\Api\Core\Exceptions\Client;
 
 use Exception;
+use Packaged\Helpers\Arrays;
 
 class ConflictException extends ClientApiException
 {
@@ -19,8 +20,8 @@ class ConflictException extends ClientApiException
 
   public function handleHeaders(array $headers)
   {
-    $this->field = $headers['x-fortifi-conflict-field'][0];
-    $this->value = $headers['x-fortifi-conflict-value'][0];
-    $this->owner = $headers['x-fortifi-conflict-owner'][0];
+    Arrays::value($headers, 'x-fortifi-conflict-field');
+    Arrays::value($headers, 'x-fortifi-conflict-value');
+    Arrays::value($headers, 'x-fortifi-conflict-owner');
   }
 }
