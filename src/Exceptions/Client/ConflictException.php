@@ -20,8 +20,8 @@ class ConflictException extends ClientApiException
 
   public function handleHeaders(array $headers)
   {
-    Arrays::value($headers, 'x-fortifi-conflict-field');
-    Arrays::value($headers, 'x-fortifi-conflict-value');
-    Arrays::value($headers, 'x-fortifi-conflict-owner');
+    $this->field = Arrays::value($headers, 'x-fortifi-conflict-field');
+    $this->value = Arrays::value($headers, 'x-fortifi-conflict-value');
+    $this->owner = Arrays::value($headers, 'x-fortifi-conflict-owner');
   }
 }
