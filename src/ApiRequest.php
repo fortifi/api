@@ -111,6 +111,10 @@ class ApiRequest implements IApiRequest
           }
         );
       }
+      catch(ClientApiException $e)
+      {
+        $this->_result = $e;
+      }
       catch(Exception $e)
       {
         $this->_result = ApiException::build($e->getCode(), $e->getMessage(), $e);
