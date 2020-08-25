@@ -5,6 +5,10 @@ use Exception;
 
 class ConflictException extends ClientApiException
 {
+  const FIELD = 'x-fortifi-conflict-field';
+  const VALUE = 'x-fortifi-conflict-value';
+  const OWNER = 'x-fortifi-conflict-owner';
+
   public $field;
   public $value;
   public $owner;
@@ -19,8 +23,8 @@ class ConflictException extends ClientApiException
 
   public function handleHeaders(array $headers)
   {
-    $this->field = !empty($headers['x-fortifi-conflict-field']) ? $headers['x-fortifi-conflict-field'][0] : null;
-    $this->value = !empty($headers['x-fortifi-conflict-value']) ? $headers['x-fortifi-conflict-value'][0] : null;
-    $this->owner = !empty($headers['x-fortifi-conflict-owner']) ? $headers['x-fortifi-conflict-owner'][0] : null;
+    $this->field = !empty($headers[static::FIELD]) ? $headers[static::FIELD][0] : null;
+    $this->value = !empty($headers[static::VALUE]) ? $headers[static::VALUE][0] : null;
+    $this->owner = !empty($headers[static::OWNER]) ? $headers[static::OWNER][0] : null;
   }
 }
