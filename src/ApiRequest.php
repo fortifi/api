@@ -136,7 +136,6 @@ class ApiRequest implements IApiRequest
           {
             $exception->handleHeaders($this->_result->getHeaders());
           }
-
           throw $exception;
         }
       }
