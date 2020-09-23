@@ -3,7 +3,8 @@
   "description": "Fortifi Business Platform",
   "homepage": "http://fortifi.co",
   "require": {
-    "packaged/helpers": "~1.1|~2.2"
+    "packaged/helpers": "~1.1|~2.2",
+    "ext-json": "*"
   },
   "require-dev": {
   },
