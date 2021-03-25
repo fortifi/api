@@ -6,7 +6,7 @@ interface IApiRequest extends IApiConnectionAware
   /**
    * Raw result from the API Request
    *
-   * @return IApiResult
+   * @return IApiResult|\Throwable
    */
   public function getRawResult();
 
