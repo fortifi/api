@@ -102,7 +102,9 @@ class ApiRequest implements IApiRequest
             return $this->_getRawResult();
           },
           function (Exception $e) {
-            if($e->getCode() == 403 && stristr($e->getMessage(), 'token'))
+            $reset = $e->getCode() == 401;
+            $reset = $reset || $e->getCode() == 403 && stristr($e->getMessage(), 'token');
+            if($reset)
             {
               $this->_connection->clearToken();
               $this->_endpoint->clearToken();
