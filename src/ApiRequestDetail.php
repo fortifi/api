@@ -255,6 +255,7 @@ class ApiRequestDetail implements IApiRequestDetail, \JsonSerializable
   /**
    * @inheritDoc
    */
+  #[\ReturnTypeWillChange]
   public function jsonSerialize()
   {
     return [
@@ -273,7 +274,7 @@ class ApiRequestDetail implements IApiRequestDetail, \JsonSerializable
   public static function fromJson($json)
   {
     $obj = is_scalar($json) ? json_decode($json) : $json;
-    $requestDetail = new static;
+    $requestDetail = new static();
     $requestDetail->_url = Objects::property($obj, 'url');
     $requestDetail->_headers = Objects::property($obj, 'headers');
     $requestDetail->_options = Objects::property($obj, 'options');
