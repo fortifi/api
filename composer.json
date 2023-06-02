@@ -9,7 +9,7 @@
   "require-dev": {
   },
   "suggest": {
-    "rmccue/requests": ">=1.0 to use the RequestsConnection",
+    "rmccue/requests": "^=1.0 to use the RequestsConnection, or ^=2.0 to use the Requests2Connection",
     "guzzlehttp/guzzle": "5.0 to use the Guzzle5Connection, or 6.0 to use the Guzzle6Connection"
   },
   "autoload": {
