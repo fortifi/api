@@ -7,7 +7,7 @@ class ProxyAuthenticationRequiredException extends ClientApiException
    * @inheritDoc
    */
   public function __construct(
-    $message = '', $code = 407, \Exception $previous = null
+    $message = '', $code = 407, ?\Exception $previous = null
   )
   {
     if(empty($message))

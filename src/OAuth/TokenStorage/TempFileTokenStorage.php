@@ -26,12 +26,12 @@ class TempFileTokenStorage implements ITokenStorage
   /**
    * Retrieve a token from storage
    *
-   * @param string   $key      location key for token
-   * @param callable $retrieve method to retireve token
+   * @param string        $key      location key for token
+   * @param callable|null $retrieve method to retireve token
    *
    * @return IToken|null
    */
-  public function retrieveToken($key, callable $retrieve = null)
+  public function retrieveToken($key, ?callable $retrieve = null)
   {
     $location = $this->_createFileName($key);
     $token = null;

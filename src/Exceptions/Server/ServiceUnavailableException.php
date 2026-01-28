@@ -7,7 +7,7 @@ class ServiceUnavailableException extends ServerApiException
    * @inheritDoc
    */
   public function __construct(
-    $message = '', $code = 503, \Exception $previous = null
+    $message = '', $code = 503, ?\Exception $previous = null
   )
   {
     if(empty($message))

@@ -7,7 +7,7 @@ class ForbiddenException extends ClientApiException
    * @inheritDoc
    */
   public function __construct(
-    $message = '', $code = 403, \Exception $previous = null
+    $message = '', $code = 403, ?\Exception $previous = null
   )
   {
     if(empty($message))

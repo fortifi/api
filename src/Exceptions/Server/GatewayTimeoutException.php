@@ -7,7 +7,7 @@ class GatewayTimeoutException extends ServerApiException
    * @inheritDoc
    */
   public function __construct(
-    $message = '', $code = 504, \Exception $previous = null
+    $message = '', $code = 504, ?\Exception $previous = null
   )
   {
     if(empty($message))

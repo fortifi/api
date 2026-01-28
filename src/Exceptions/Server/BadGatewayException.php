@@ -7,7 +7,7 @@ class BadGatewayException extends ServerApiException
    * @inheritDoc
    */
   public function __construct(
-    $message = '', $code = 502, \Exception $previous = null
+    $message = '', $code = 502, ?\Exception $previous = null
   )
   {
     if(empty($message))

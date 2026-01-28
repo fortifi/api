@@ -24,7 +24,7 @@ use Fortifi\Api\Core\Exceptions\Server\ServiceUnavailableException;
 
 class ApiException extends Exception
 {
-  public static function build($code, $message = null, Exception $previous = null)
+  public static function build($code, $message = null, ?Exception $previous = null)
   {
     switch((int)$code)
     {

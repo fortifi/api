@@ -7,7 +7,7 @@ class InternalServerException extends ServerApiException
    * @inheritDoc
    */
   public function __construct(
-    $message = '', $code = 500, \Exception $previous = null
+    $message = '', $code = 500, ?\Exception $previous = null
   )
   {
     if(empty($message))

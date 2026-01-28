@@ -7,7 +7,7 @@ class NotAcceptableException extends ClientApiException
    * @inheritDoc
    */
   public function __construct(
-    $message = '', $code = 406, \Exception $previous = null
+    $message = '', $code = 406, ?\Exception $previous = null
   )
   {
     if(empty($message))

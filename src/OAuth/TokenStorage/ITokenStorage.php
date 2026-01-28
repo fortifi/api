@@ -19,12 +19,12 @@ interface ITokenStorage
   /**
    * Retrieve a token from storage
    *
-   * @param string   $key      location key for token
-   * @param callable $retrieve method to retireve token
+   * @param string        $key      location key for token
+   * @param callable|null $retrieve method to retrieve token
    *
    * @return IToken|null
    */
-  public function retrieveToken($key, callable $retrieve = null);
+  public function retrieveToken($key, ?callable $retrieve = null);
 
   /**
    * Clear the token, forcing revalidation

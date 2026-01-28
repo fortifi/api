@@ -7,7 +7,7 @@ class BadApiRequestException extends ClientApiException
    * @inheritDoc
    */
   public function __construct(
-    $message = '', $code = 400, \Exception $previous = null
+    $message = '', $code = 400, ?\Exception $previous = null
   )
   {
     if(empty($message))

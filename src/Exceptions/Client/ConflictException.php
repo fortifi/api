@@ -20,7 +20,7 @@ class ConflictException extends ClientApiException
   /**
    * @inheritDoc
    */
-  public function __construct($message = '', $code = 409, Exception $previous = null)
+  public function __construct($message = '', $code = 409, ?Exception $previous = null)
   {
     parent::__construct($message ?: 'Conflict', $code, $previous);
   }

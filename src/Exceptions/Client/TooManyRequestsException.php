@@ -7,7 +7,7 @@ class TooManyRequestsException extends ClientApiException
    * @inheritDoc
    */
   public function __construct(
-    $message = '', $code = 429, \Exception $previous = null
+    $message = '', $code = 429, ?\Exception $previous = null
   )
   {
     if(empty($message))
